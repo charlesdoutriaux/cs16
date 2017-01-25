@@ -1,3 +1,4 @@
+## ref for py3 extensions: http://python3porting.com/cextensions.html
 from distutils.core import setup, Extension
 import os
 import sys
