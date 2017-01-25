@@ -1,0 +1,24 @@
+Hello
+
+This my autobiography for CS 16.
+
+First of all, let's go over what I do with computer on my own time. Sadly, usually on my own time if I'm in front of a computer is because I'm actually working. But when I'm not then I'm likely on my Ubuntu playing around with some code or tweaking my computer systems. Lately I've been having fun teaching Python to my 8-year-old son. We're using Python API to a java Minecraft server. It's a lot of fun.
+At work, I'm constantly in front of a computer I'm a computer scientist at Lawrence Livermore Lab and we develop software to analyze climate model output. It's an amazing group that lets us touch every aspect of computer science be it networking, hardware, parallel processing, data mining, machine learning, web, etc...
+
+My two main projects are the Community Data Analysis Tools a Python software suite to allow research scientists to analyze climate model output (along with observation data) and I'm also in charge of a compute group trying to solve data transfer issues by bringing the code to the data rather than the other around.
+
+I'm mainly a backend developer and probably also a masochist, I usually tell everybody that I like big and difficult problems that hold back the scientists. Once we got a solution working for them I am ready to hand it down to other specialists to make things "pretty". I really do not care much for UIs. 
+
+Which bring us to "why am I taking this class"? Indeed, every click and mouse movement has a tendency to make me sick, so why? Obviously not for work, others do these things with passion and should continue doing them. The reason I'm taking this class is "fun". I like to have my little CS projects at home (collecting data from my weather station and running stats on it, etc...). But I always wanted to play with apps so I can take my little projects everywhere with me (and show off to my friends, I know I'm a nerd, don't judge me please). 
+
+Now to keep being brutally honest, I was thinking after only scanning the title that I was enrolling in an Android class. I forgot to mention I'm passionate about open source (our work is open sourced) and find despicable Apple's methods... 
+
+But we do have iPad at home and learning SWIFT is going to be fun so I'm excited about the class, beside I'm sure some concepts can be transferred to Android as well.
+
+I would say that my programing abilities are excellent even though this will be my first ever CS class. I'm an entirely self-taught when it comes to CS.
+
+Probably my worst experience in CS was having to write the Climate Model Output Rewriter. While the project started as fun (pure C), it went even more fun when making Python use it. Where things went horrible was writing the Fortran interface. I had almost as many line of code in Fortran to describe all the possible interfaces (up to 5D arrays) than actual C code (7500 vs 10000). 
+
+My best experience is my job, everyday even after nearly 20 years of doing so, I'm still waking excited to go code some more. Really what makes it so rewarding to me is having users constantly pop into my office and ask question or ask for new features or even report bugs. Also, leading this international team of CS people and setting standards for our distributed and federated system is really exciting
+
+In short I love coding and I'm taking this class for "fun".
