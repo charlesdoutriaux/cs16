@@ -11,7 +11,6 @@ if sys.argv[-1] != "build":
     sys.argv.append("build")
 
 # C extension code
-f=open("add.c","w")
 code = """double add(float a, float b) {
    return a+b;
    }
@@ -35,26 +34,48 @@ static PyMethodDef MyExtMethods[]= {
   {"add", Py_myadd , METH_VARARGS},
   {NULL, NULL} /*sentinel */
 };
-static struct PyModuleDef cmodule = {
-   PyModuleDef_HEAD_INIT,
-   "c",   /* name of module */
-   NULL, /* module documentation, may be NULL */
-   -1,       /* size of per-interpreter state of the module,
-   or -1 if the module keeps state in global variables. */
-   MyExtMethods
-                               };
-PyMODINIT_FUNC PyInit_c(void)
-{
-     PyObject *m;
+#if PY_MAJOR_VERSION >= 3
+PyMODINIT_FUNC PyInit_c(void){
+  {
+    static struct PyModuleDef cmodule = {
+       PyModuleDef_HEAD_INIT,
+       "c",   /* name of module */
+       NULL, /* module documentation, may be NULL */
+       -1,       /* size of per-interpreter state of the module,
+       or -1 if the module keeps state in global variables. */
+       MyExtMethods,
+       NULL,
+       NULL,
+       NULL,
+       NULL
+    };
+    PyObject *m;
+    m = PyModule_Create(&cmodule);
+        if (m == NULL)
+                return NULL;
 
-     m = PyModule_Create(&cmodule);
-     if (m == NULL)
-         return NULL;
-    return m;
-}
+                    if (PyModule_AddObject(m, "hookable",
+                               (PyObject *)&hookabletype) < 0)
+                                       return NULL;
+
+                                           return m;
+
+  };
+#else
+   PyMODINIT_FUNC initc(void){
+       Py_InitModule3("c",MyExtMethods,NULL);
+   };
+#endif
+
 """
-print(code+extension_c_code,file=f)
-#print >>f, code+extension_c_code
+with open("add.c","w") as f:
+    #print(code+extension_c_code,file=f)
+    print >>f, code+extension_c_code
+
+init_src = """# __init__ """
+with open("__init__.py","w") as f:
+    print >>f,init_src
+
 
 
 setup (name = "extend",
@@ -80,6 +101,8 @@ setup (name = "extend",
 build_dir = glob.glob(os.path.join("build","*"))[0]
 print("BDIR:",build_dir)
 sys.path.append(build_dir)
-#import extend
+import extend
+print("PATH:",sys.path)
 import extend.c
 print("DIR",dir(extend))
+print("DIR C:",dir(extend.c))
