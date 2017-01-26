@@ -36,7 +36,7 @@ static PyMethodDef MyExtMethods[]= {
   {NULL, NULL} /*sentinel */
 };
 #if PY_MAJOR_VERSION >= 3
-PyMODINIT_FUNC PyInit_c(void){
+PyMODINIT_FUNC PyInit_c(void)
   {
     static struct PyModuleDef cmodule = {
        PyModuleDef_HEAD_INIT,
@@ -50,18 +50,17 @@ PyMODINIT_FUNC PyInit_c(void){
        NULL,
        NULL
     };
-    PyObject *m;
-    m = PyModule_Create(&cmodule);
-        if (m == NULL)
-                return NULL;
+PyObject *m;
+m = PyModule_Create(&cmodule);
+if (m == NULL)
+    return NULL;
 
-                    if (PyModule_AddObject(m, "hookable",
-                               (PyObject *)&hookabletype) < 0)
-                                       return NULL;
+//if (PyModule_AddObject(m, "hookable", (PyObject *)&hookabletype) < 0)
+//   return NULL;
 
-                                           return m;
+return m;
 
-  };
+};
 #else
    PyMODINIT_FUNC initc(void){
        Py_InitModule3("c",MyExtMethods,NULL);
@@ -70,12 +69,13 @@ PyMODINIT_FUNC PyInit_c(void){
 
 """
 with open("add.c","w") as f:
-    #print(code+extension_c_code,file=f)
-    print >>f, code+extension_c_code
+    print(code+extension_c_code,file=f)
+    #print >>f, code+extension_c_code
 
 init_src = """# __init__ """
 with open("__init__.py","w") as f:
-    print >>f,init_src
+    print(init_src,file=f)
+    #print >>f,init_src
 
 
 
