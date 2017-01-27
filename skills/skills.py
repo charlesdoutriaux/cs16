@@ -74,11 +74,11 @@ return m;
 
 """
 with open("add.c", "w") as f:
-    print(code + extension_c_code, file=f)
+    f.write(code + extension_c_code)
 
 init_src = """# __init__ """
 with open("__init__.py", "w") as f:
-    print(init_src, file=f)
+    f.write(init_src)
 
 
 setup(name="extend",
