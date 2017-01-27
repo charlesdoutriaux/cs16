@@ -1,4 +1,15 @@
 # ref for py3 extensions: http://python3porting.com/cextensions.html
+# This code is a sample code for:
+#  - write C extension compatible for both python 3 and 2
+#  - use classes
+#  - use class properties
+#  - use decorators
+#  - write tests
+
+# Things we could add to make this fancier
+#  - ask user to pint to C file with function and functions names to wrap
+#  - use argparse to process user inputs
+
 import sys
 from distutils.core import setup, Extension
 import os
@@ -10,7 +21,6 @@ import time
 # Because we can only have one .txt file all extensions
 # Have to be written from within this file
 # same for the setup.py file
-
 # setup.py needs argument "build"
 if sys.argv[-1] != "build":
     sys.argv.append("build")
@@ -73,6 +83,8 @@ return m;
 #endif
 
 """
+
+# Create the files
 with open("add.c", "w") as f:
     f.write(code + extension_c_code)
 
@@ -80,7 +92,7 @@ init_src = """# __init__ """
 with open("__init__.py", "w") as f:
     f.write(init_src)
 
-
+# Run setup to generate module locally
 setup(name="extend",
       version='1.0',
       author='Charles Doutriaux',
@@ -101,24 +113,30 @@ setup(name="extend",
       )
 
 
+# Add build directory to path so we can import
 build_dir = glob.glob(os.path.join("build", "*"))[0]
 sys.path.append(build_dir)
 import extend  # noqa
 import extend.c  # noqa
 
 
+# Create class to route the function to the proper language implementation
 class Add(object):
+    # reserved slots
     __slots__ = [
         "_language",
     ]
 
+    # initialize class
     def __init__(self, language="python"):
         self.language = language
 
+    # getting the language, nothing fancy
     @property
     def language(self):
         return self._language
 
+    # Some basic checks when setting the language
     @language.setter
     def language(self, value):
         if not isinstance(value, str):
@@ -127,6 +145,7 @@ class Add(object):
             raise ValueError("%s not implemented yet")
         self._language = value.lower()
 
+    # The routing function
     def add(self, a, b):
         if self.language == "c":
             return extend.c.add(float(a), float(b))
@@ -134,45 +153,52 @@ class Add(object):
             return float(a) + float(b)
 
 
-# some basic tests
-P = Add()
-C = Add("C")
-
-
 # Some timing for fun
-
-
 def timeit(Operator, N=1000000):
+    """Runs function 'add' N times on Operator and time it """
+    # Record start time
     start = time.clock()
-    for i in range(N):
+    for i in range(N):  # loop N times
         Operator.add(random.random(), random.random())
     end = time.clock()
     print("Using %s it took %f seconds to add %i times" %
           (Operator.language, end - start, N))
 
 
+# Default language is Python
+P = Add()
+# Create a C-based one
+C = Add("C")
+# run the timing test for both
 timeit(P)
 timeit(C)
 
-
+# Unittestit, have to put it last because it exits
 class TestCase(unittest.TestCase):
 
     def test(self):
+        """validate result Python"""
+        P = Add()
         self.assertTrue(P.add(2, 3) == 5)
 
     def test2(self):
-        print(C.add(2, 3))
+        """Validate C result"""
+        C = Add("C")
         self.assertTrue(C.add(2, 3) == 5.)
 
     def test3(self):
+        """Validate you cannot set anything not 'language'"""
         with self.assertRaises(AttributeError):
             P.bad = 5
 
     def test4(self):
+        """Validates you cannot pass unsupported language"""
         with self.assertRaises(ValueError):
             P.language = "Fortran"
 
     def test5(self):
+        """Validates language changes"""
+        P = Add()
         P.language = "c"
         self.assertTrue(P.language == "c")
         P.language = "python"
